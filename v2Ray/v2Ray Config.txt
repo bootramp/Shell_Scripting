@@ -1,0 +1,49 @@
+{
+  "inbounds": [
+    {
+      "port": 1070,
+      "listen": "0.0.0.0",
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true,
+        "ip": "127.0.0.1"
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "<MY_ADDRESS>",
+            "port": <MY_PORT>,
+            "users": [
+              {
+                "id": "MY_UUID",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none",
+        "tcpSettings": {
+          "header": {
+            "type": "http",
+            "request": {
+              "path": ["/"],
+              "headers": {
+                "Host": "varzesh3.com"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

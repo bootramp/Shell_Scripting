@@ -1,0 +1,16 @@
+# نصب وابستگی‌ها
+sudo apt update
+sudo apt install -y curl
+
+# دانلود و نصب V2Ray
+bash <(curl -s -L https://git.io/v2ray.sh)
+
+systemctl start v2ray  # برای استارت سرویس
+systemctl stop v2ray   # برای توقف سرویس
+systemctl restart v2ray # برای ری‌استارت سرویس
+systemctl status v2ray # برای دیدن وضعیت سرویس
+
+vim /etc/v2ray/config.json
+
+systemctl restart v2ray
+
