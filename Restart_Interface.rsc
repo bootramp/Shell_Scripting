@@ -1,5 +1,5 @@
 # Define the interface name.
-:local interfaceName "RayanSteel"
+:local interfaceName "<Session_name>"
 
 # Find the interface ID of the SSTP Client interface.
 :local interfaceID [/interface sstp-client find where name=$interfaceName]
