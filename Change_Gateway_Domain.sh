@@ -1,40 +1,40 @@
 #!/bin/bash
 
-# Define Domain
+# دامنه مورد نظر را تعريف کنيد
 domain="MY_DOMAIN"
 
-# Define Gateway
+# گيت‌وي مقصد را تعريف کنيد
 gateway="MY_IP"
 
-# Change route Func
+# تابعي براي تنظيم مسير به گيت‌وي
 define_route() {
     local ip=$1
     local gw=$2
 
-    # Check Existing Path
+    # بررسي وجود مسير
     route_exists=$(ip route | grep "$ip via $gw")
     if [ -z "$route_exists" ]; then
-        # Add Path
+        # مسير را اضافه کنيد
         ip route add $ip via $gw 2>/dev/null ||  ip route replace $ip via $gw
-        echo "Add Route to $ip via $gw" 
+        echo "مسير به $ip از طريق $gw اضافه شد." 
     else
-        echo "Already exist $ip via $gw" 
+        echo "مسير به $ip از طريق $gw از قبل وجود دارد." 
     fi
 }
 
-# Ultimate Loop for Check
-echo "Start ping $domain and route IP to $gateway"
+# حلقه بي‌نهايت براي پينگ و بروزرساني IP
+echo "شروع به پينگ $domain و انتقال IP به گيت‌وي $gateway..."
 while true; do
-    # Take IP from Ping
+    # گرفتن IP از طريق پينگ
     ip=$(ping -c 1 $domain | grep "PING" | awk -F'[()]' '{print $2}')
 
     if [[ -n "$ip" ]]; then
-        echo "Current IP $domain: $ip "
+        echo "IP فعلي دامنه $domain: $ip"
         define_route $ip $gateway
     else
-        echo "Error when take IP from $domain"
+        echo "خطا در گرفتن IP براي دامنه $domain"
     fi
 
-    # Wait a 1 Sec
+    # يک ثانيه صبر کنيد
     sleep 1
 done
