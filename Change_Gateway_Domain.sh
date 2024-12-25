@@ -1,40 +1,40 @@
 #!/bin/bash
 
-# œ«„‰Â „Ê—œ ‰Ÿ— —«  ⁄—Ì› ò‰Ìœ
+# Define Domain
 domain="MY_DOMAIN"
 
-# êÌ ùÊÌ „ﬁ’œ —«  ⁄—Ì› ò‰Ìœ
+# Define Gateway
 gateway="MY_IP"
 
-#  «»⁄Ì »—«Ì  ‰ŸÌ„ „”Ì— »Â êÌ ùÊÌ
+# Change route Func
 define_route() {
     local ip=$1
     local gw=$2
 
-    # »——”Ì ÊÃÊœ „”Ì—
+    # Check Existing Path
     route_exists=$(ip route | grep "$ip via $gw")
     if [ -z "$route_exists" ]; then
-        # „”Ì— —« «÷«›Â ò‰Ìœ
+        # Add Path
         ip route add $ip via $gw 2>/dev/null ||  ip route replace $ip via $gw
-        echo "„”Ì— »Â $ip «“ ÿ—Ìﬁ $gw «÷«›Â ‘œ." 
+        echo "Add Route to $ip via $gw" 
     else
-        echo "„”Ì— »Â $ip «“ ÿ—Ìﬁ $gw «“ ﬁ»· ÊÃÊœ œ«—œ." 
+        echo "Already exist $ip via $gw" 
     fi
 }
 
-# Õ·ﬁÂ »Ìù‰Â«Ì  »—«Ì ÅÌ‰ê Ê »—Ê“—”«‰Ì IP
-echo "‘—Ê⁄ »Â ÅÌ‰ê $domain Ê «‰ ﬁ«· IP »Â êÌ ùÊÌ $gateway..."
+# Ultimate Loop for Check
+echo "Start ping $domain and route IP to $gateway"
 while true; do
-    # ê—› ‰ IP «“ ÿ—Ìﬁ ÅÌ‰ê
+    # Take IP from Ping
     ip=$(ping -c 1 $domain | grep "PING" | awk -F'[()]' '{print $2}')
 
     if [[ -n "$ip" ]]; then
-        echo "IP ›⁄·Ì œ«„‰Â $domain: $ip"
+        echo "Current IP $domain: $ip "
         define_route $ip $gateway
     else
-        echo "Œÿ« œ— ê—› ‰ IP »—«Ì œ«„‰Â $domain"
+        echo "Error when take IP from $domain"
     fi
 
-    # Ìò À«‰ÌÂ ’»— ò‰Ìœ
+    # Wait a 1 Sec
     sleep 1
 done
